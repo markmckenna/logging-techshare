@@ -1,9 +1,19 @@
+class ProductPurchase extends PurchasingAction {
+    constructor(customer, product, quantity) {
+        this.customer = customer
+        this.product = product
+        this.quantity = quantity
+    }
+
+    execute() {
+        inventory.reserve(this.product, this.quantity)
+        this.customer.shoppingCart.add(this.product, this.quantity)
+        this.customer.notifyUpdates()
+    }
+}
+
 function buySomething(customer, product, quantity) {
-    log.inContext('ProductPurchase', { customer, product, quantity }, () => {
-        inventory.reserve(product, quantity)
-        customer.shoppingCart.add(product, quantity)
-        customer.notifyUpdates()
-    })
+    engine.execute(new ProductPurchase(customer, product, quantity))
 }
 
 /* Possible output:
